@@ -24,7 +24,7 @@ main.main {
 }
 
 .main .title {
-  font-weight: 3rem;
+  font-size: 3rem;
   font-weight: bold;
   margin-bottom: 2rem;
 }

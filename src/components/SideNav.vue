@@ -34,7 +34,7 @@ export default {
     logout() {
       // If there is a login and it it stored in the local storage
       localStorage.removeItem('x-auth-token')
-      router.push('/auth/login')
+      router.push('/auth/logout')
     },
   },
 }
@@ -87,10 +87,11 @@ export default {
   background: #ddd;
   padding: 10px 0;
   text-align-last: center;
-  width: 80%;
+  width: 90%;
   margin: 0.5rem auto;
   display: block;
   font-weight: 400;
+  cursor: pointer;
   border-radius: 10px;
 }
 .sidenav__btn > span:hover {

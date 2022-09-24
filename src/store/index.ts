@@ -65,8 +65,7 @@ export default createStore({
     },
 
     updateAll({ commit }, { emails, value }: any) {
-      const data = <any>[]
-      console.log(emails)
+      const data = <any>[] 
 
       emails.forEach((email: any) => {
         data.push({ ...email, checked: value })

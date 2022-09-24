@@ -2,14 +2,12 @@
   <main class="main">
     <div class="page__header">
       <div class="page__header-title">
-        {{
-          $route.fullPath == '/inbox'
-            ? `inbox ${store.state.emails.length}`
-            : `archive ${store.state.archivedMails.length}`
-        }}
+        {{ $route.fullPath == '/inbox' ? `inbox` : `archive ` }}
       </div>
 
-      <div class="page__header-message">Email Selected (3)</div>
+      <div class="page__header-message">
+        Email Selected ({{ no_of_selected_emails }})
+      </div>
     </div>
 
     <div class="page__content">
@@ -56,8 +54,6 @@
         </div>
       </div>
     </div>
-    {{ store.state.emails }}
-
     <div id="myModal" class="modal" :class="isModalOpen ? 'opoend' : 'closed'">
       <div class="modal__content">
         <div class="modal__content-header">
@@ -81,8 +77,6 @@
           </p>
         </div>
       </div>
-
-      <span class="close" @click="toggleModalbox('close')">&times;</span>
     </div>
   </main>
 </template>
@@ -98,6 +92,7 @@ export default {
     const store = useStore()
     const isModalOpen = ref(false)
     const emails = ref([])
+    const no_of_selected_emails = ref(0)
     const isAllMailChecked = ref(store.state.isAllMailChecked)
 
     const toggleCheckedEmail = async () => {
@@ -106,17 +101,21 @@ export default {
           emails: emails.value,
           value: true,
         }
+
         await store.dispatch('updateAll', params)
         getEmailFromStore()
         isAllMailChecked.value = true
+        no_of_selected_emails.value = emails.value.length
       } else if (isAllMailChecked.value === true) {
         const params = {
           emails: store.state.emails,
           value: false,
         }
+
         await store.dispatch('updateAll', params)
         getEmailFromStore()
         isAllMailChecked.value = false
+        no_of_selected_emails.value = 0
       }
     }
 
@@ -128,10 +127,14 @@ export default {
       await store.dispatch('updateSingleEmail', params)
       await getEmailFromStore()
 
+      no_of_selected_emails.value = 0
       let allChecked = true
+
       emails.value.forEach((email: any) => {
         if (email.checked === false) {
           allChecked = false
+        } else {
+          no_of_selected_emails.value += 1
         }
       })
 
@@ -179,6 +182,7 @@ export default {
       toggleModalbox,
       toggleCheckedEmail,
       toggleSingleEmailCheck,
+      no_of_selected_emails,
     }
   },
 }
@@ -321,26 +325,6 @@ main.main {
   padding: 3rem 2rem;
   border: 1px solid #888;
   width: 30%;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  padding: 8px 16px;
-  background: red;
-  border-radius: 50%;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
 }
 
 .modal__content-body {
